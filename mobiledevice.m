@@ -5,7 +5,7 @@
 enum MobileDeviceCommandType
 {
   GetUDID,
-  GetDevices,
+  ListDevices,
   InstallApp,
   UninstallApp,
   ListInstalledApps,
@@ -84,15 +84,15 @@ static void get_udid(struct am_device *device)
   }
 }
 
-static void describe(struct am_device *device)
+static void describe_device(struct am_device *device)
 {
   connect_to_device(device);
   NSString* name = (__bridge NSString*) AMDeviceCopyValue(device, 0, CFSTR("DeviceName"));
   NSString* udid = (__bridge NSString*) AMDeviceCopyDeviceIdentifier(device);
   NSString* product_type = (__bridge NSString*) AMDeviceCopyValue(device, 0, CFSTR("ProductType"));
-  NSString* ios_version = (__bridge NSString*) AMDeviceCopyValue(device, 0, CFSTR("ProductVersion"));
-
-  printfNS(@"%@ [%@ | iOS %@ | %@]\n", name, product_type, ios_version, udid);
+  NSString* ios_version = (__bridge NSString*) AMDeviceCopyValue(device, 0, CFSTR("ProductVersion")); 
+  
+  printfNS(@"%@\t%@\t%@\t%@\n", udid, product_type, ios_version, name);
 }
 
 static void install_app(struct am_device *device)
@@ -173,8 +173,8 @@ static void on_device_connected(struct am_device *device)
   {
     get_udid(device);
   }
-  else if (command.type == GetDevices) {
-    describe(device);
+  else if (command.type == ListDevices) {
+    describe_device(device);
   }
   else if (command.type == InstallApp)
   {
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
   // list devices
   else if ((argc == 2) && (strcmp(argv[1], "list_devices") == 0))
   {
-    command.type = GetDevices;
+    command.type = ListDevices;
     // I want this in another way
     dispatch_after(dispatch_time((0ull), (int64_t)(0.5 * 1000000000ull)), dispatch_get_main_queue(), ^{
       unregister_device_notification(0);
