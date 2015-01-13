@@ -197,9 +197,17 @@ static void on_device_connected(struct am_device *device)
 
 static void on_device_notification(struct am_device_notification_callback_info *info, int cookie)
 {
-  if (info->msg == ADNCI_MSG_CONNECTED)
-  {
-    on_device_connected(info->dev);
+  switch (info->msg) {
+    case ADNCI_MSG_CONNECTED:
+      printfNS(@"ADNCI_MSG_CONNECTED\n");
+      on_device_connected(info->dev);
+      break;
+    case ADNCI_MSG_DISCONNECTED:
+      printfNS(@"ADNCI_MSG_DISCONNECTED\n");
+      break;
+    case ADNCI_MSG_UNSUBSCRIBED:
+      printfNS(@"ADNCI_MSG_UNSUBSCRIBED\n");
+      break;
   }
 }
 
@@ -244,7 +252,8 @@ int main(int argc, char *argv[])
   {
     command.type = ListDevices;
     // I want this in another way
-    dispatch_after(dispatch_time((0ull), (int64_t)(0.5 * 1000000000ull)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time((0ull), (int64_t)(5 * 1000000000ull)), dispatch_get_main_queue(), ^{
+      printfNS(@"TIMED OUT AFTER 5 SECONDS\n");
       unregister_device_notification(0);
     });
   }
