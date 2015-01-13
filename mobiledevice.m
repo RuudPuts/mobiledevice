@@ -213,15 +213,17 @@ static void print_syntax()
 {
   printf("Usage: mobiledevice <command> [<options>]\n\n");
   printf("<Commands>\n");
-  printf("  get_udid                     : Display UDID of connected device\n");
-  printf("  get_bundle_id <path_to_app>  : Display bundle identifier of app (.app folder)\n");
-  printf("  install_app <path_to_app>    : Install app (.app folder) to device\n");
-  printf("  uninstall_app <bundle_id>    : Uninstall app by bundle id\n");
-  printf("  list_installed_apps [-p]     : Lists all installed apps on device\n");
-  printf("  tunnel <from_port> <to_port> : Forward TCP connections to connected device\n");
+  printf("  list_devices                  : Display all connected devices\n");
+  printf("  get_udid                      : Display UDID of connected device\n");
+  printf("  get_bundle_id <path_to_app>   : Display bundle identifier of app (.app folder)\n");
+  printf("  install_app <path_to_app>     : Install app (.app folder) to device\n");
+  printf("  uninstall_app <bundle_id>     : Uninstall app by bundle id\n");
+  printf("  list_installed_apps [-p] [-u] : Lists all installed apps on device\n");
+  printf("  tunnel <from_port> <to_port>  : Forward TCP connections to connected device\n");
   printf("\n");
   printf("<Options>\n");
   printf("  -p : Include installation paths (use with list_installed_apps)\n");
+  printf("  -u : UDID of targeted device (use with list_installed_apps)\n");
 }
 
 int main(int argc, char *argv[])
